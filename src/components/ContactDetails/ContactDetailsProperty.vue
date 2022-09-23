@@ -230,7 +230,7 @@ export default {
 				return {
 					...prev,
 					[contact.uid]: {
-						id: contact.uid,
+						id: contact.key,
 						name: contact.displayName,
 					},
 				}
@@ -342,7 +342,13 @@ export default {
 						? this.property.setValues([data])
 						: this.property.setValues(data)
 				} else {
-					this.property.setValue(data)
+					if (this.propName === 'x-managersname') {
+						const manager = this.$store.getters.getContact(data)
+						this.property.setValue(manager.displayName)
+						this.property.setParameter('UID', manager.uid)
+					} else {
+						this.property.setValue(data)
+					}
 				}
 				this.updateContact()
 			},
